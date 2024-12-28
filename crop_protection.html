@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Protection Products</title>
+  <style>
+    /* Basic styles for the page */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #a8dba8;
+    }
+
+    .header {
+      background-color: #28a745;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px;
+    }
+
+    .product-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      width: 200px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: scale(1.05);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .product-card h3 {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .product-card p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .product-card button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .product-card button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Cart Sidebar */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 300px;
+      height: 100%;
+      background: #fff;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: right 0.3s;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-sidebar h3 {
+      margin-top: 0;
+    }
+
+    .cart-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .cart-sidebar ul li {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-sidebar button {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      width: 80px;
+    }
+
+    .cart-sidebar button:hover {
+      background-color: #c82333;
+    }
+
+    /* Cart Toggle Button */
+    .cart-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+
+    .cart-toggle:hover {
+      background: #218838;
+    }
+
+    /* Bill Styles */
+    .bill {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #92f2f7;
+      padding: 30px;
+      border-radius: 10px;
+      width: 500px;
+      max-width: 90%;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1100;
+      display: none;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .bill h3 {
+      text-align: center;
+      font-size: 28px;
+      color: #28a745;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .bill ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .bill ul li {
+      font-size: 16px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #f1f1f1;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .bill ul li span {
+      font-weight: bold;
+    }
+
+    .bill p {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    .close-bill {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #dc3545;
+    }
+
+    .close-bill:hover {
+      color: #c82333;
+    }
+
+    /* Button Styles */
+    .bill button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+
+    .bill button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Form Styles */
+    .form-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #92f2f7;
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 90%;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1200;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .form-container h3 {
+      text-align: center;
+      font-size: 24px;
+      color: #28a745;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .form-container button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .form-container button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Payment Form */
+    .payment-form {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #92f2f7;
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 90%;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1300;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .payment-form h3 {
+      text-align: center;
+      font-size: 24px;
+      color: #28a745;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .payment-form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .payment-form select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .payment-form button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .payment-form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Feedback Form */
+    .feedback-form {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #92f2f7;
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 90%;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1400;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .feedback-form h3 {
+      text-align: center;
+      font-size: 24px;
+      color: #28a745;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .feedback-form .stars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .feedback-form .stars i {
+      font-size: 30px;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .feedback-form .stars i.selected {
+      color: #f39c12;
+    }
+
+    .feedback-form textarea {
+      width: 100%;
+      padding: 10px;
+      height: 100px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      resize: none;
+    }
+
+    .feedback-form button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .feedback-form button:hover {
+      background-color: #0056b3;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Crop Protection Products</h1>
+  </div>
+
+  <!-- Product Cards -->
+  <div class="product-grid">
+    <div class="product-card" onclick="showProductDetails('Fungicide X', 200, 'Fungicide X controls fungal infections in crops.')">
+      <img src="assets/crop protection/1.avif" alt="Fungicide X">
+      <h3>Fungicide X</h3>
+      <p>Price: ₹200</p>
+      <button onclick="addToCart('Fungicide X', 200, event)">Add to Cart</button>
+    </div>
+    <div class="product-card" onclick="showProductDetails('Fungicide Y', 200, 'Fungicide Y controls fungal infections in crops.')">
+      <img src="assets/crop protection/2.avif" alt="Fungicide Y">
+      <h3>Fungicide Y</h3>
+      <p>Price: ₹200</p>
+      <button onclick="addToCart('Fungicide Y', 200, event)">Add to Cart</button>
+    </div>
+    <div class="product-card" onclick="showProductDetails('Herbicide A', 220, 'Herbicide A controls stubborn weeds in agricultural fields.')">
+      <img src="assets/crop protection/4.avif" alt="Herbicide A">
+      <h3>Herbicide A</h3>
+      <p>Price: ₹220</p>
+      <button onclick="addToCart('Herbicide A', 220, event)">Add to Cart</button>
+    </div>
+    <div class="product-card" onclick="showProductDetails('No Virus Bio Viricide ', 242, 'Geolife No Virus is an organic viricide made with a unique combination of herbs.')">
+        <img src="assets/crop protection/4.avif" alt="Tomato Seeds">
+        <h3>No Virus Bio Viricide </h3>
+        <p>Price: ₹242</p>
+        <button onclick="addToCart('No Virus Bio Viricide', 242, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('Coragen Insecticide ', 166, 'It is powered by the active ingredient Rynaxypyr which has a unique mode of action that controls pests resistant to other insecticides.')">
+        <img src="assets/crop protection/5.avif" alt="Tomato Seeds">
+        <h3>Coragen Insecticide</h3>
+        <p>Price: ₹166</p>
+        <button onclick="addToCart('Coragen Insecticide', 166, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('Simodis Insecticide ', 735, 'Simodis Insecticide is a robust & 360°solution meticulously designed to protect your crops against a variety of destructive insects.')">
+        <img src="assets/crop protection/6.avif" alt="Tomato Seeds">
+        <h3>Simodis Insecticide</h3>
+        <p>Price: ₹735</p>
+        <button onclick="addToCart('Simodis Insecticide', 735, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('EM-1 Insecticide', 196, 'EM 1 Insecticide is Broad-spectrum insecticide that is effective against caterpillars, It is useful for crops such as cotton, okra, cabbage, cauliflower, chili, brinjal, red gram, chickpea, grapes and tea.')">
+        <img src="assets/crop protection/7.avif" alt="Tomato Seeds">
+        <h3>EM-1 Insecticide</h3>
+        <p>Price: ₹196</p>
+        <button onclick="addToCart('EM-1 Insecticide', 196, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('V-BIND BIO VIRICIDE ', 320, 'Effective against a wide range of viral diseases, including tobacco mosaic virus (TMV), papaya curl virus, cucumber mosaic virus, and tomato leaf curl virus.')">
+        <img src="assets/crop protection/8.avif" alt="Tomato Seeds">
+        <h3>V-BIND BIO VIRICIDE</h3>
+        <p>Price: ₹320</p>
+        <button onclick="addToCart('V-BIND BIO VIRICIDE', 320, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('Phoskill Insecticide ', 199, 'Phoskill Insecticide is a chemical pesticide highly effective broad-spectrum solution for the management of various sucking and chewing pests in Agriculture.')">
+        <img src="assets/crop protection/9.avif" alt="Tomato Seeds">
+        <h3>Phoskill Insecticide</h3>
+        <p>Price: ₹199</p>
+        <button onclick="addToCart('Phoskill Insecticide', 199, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('Indofil M-45 Fungicide ', 143, 'King of all fungicides- Broad spectrum fungicide, which controls large no. of diseases with its multisite action, caused by phycomycetous, advance fungi and other group of fungi infecting many crops.')">
+        <img src="assets/crop protection/10.avif" alt="Tomato Seeds">
+        <h3>Indofil M-45 Fungicide</h3>
+        <p>Price: ₹143</p>
+        <button onclick="addToCart('Indofil M-45 Fungicide', 143, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('Benevia Insecticide ', 799, 'Benevia FMC offers a unique cross spectrum activity which gives nearly one-shot solution by controlling both sucking and chewing pests.')">
+        <img src="assets/crop protection/11.avif" alt="Tomato Seeds">
+        <h3>Benevia Insecticide</h3>
+        <p>Price: ₹799</p>
+        <button onclick="addToCart('Benevia Insecticide', 799, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('Alika Insecticide ', 213, 'Alika Insecticide is a broad-spectrum insecticide that provides excellent control of sucking and chewing pests.')">
+        <img src="assets/crop protection/12.avif" alt="Tomato Seeds">
+        <h3>Alika Insecticide</h3>
+        <p>Price: ₹213</p>
+        <button onclick="addToCart('Alika Insecticide', 213, event)">Add to Cart</button>
+      </div>
+  </div>
+
+  <!-- Cart Sidebar -->
+  <div id="cart-sidebar" class="cart-sidebar">
+    <h3>Your Cart</h3>
+    <ul id="cart-items"></ul>
+    <button onclick="generateBill()">Generate Bill</button>
+  </div>
+
+  <!-- Cart Toggle Button -->
+  <button class="cart-toggle" onclick="toggleCart()">🛒</button>
+
+  <!-- Bill Modal -->
+  <div id="billModal" class="bill">
+    <span class="close-bill" onclick="closeBill()">×</span>
+    <h3>Agricard</h3>
+    <ul id="bill-items"></ul>
+    <button onclick="openForm()">Buy Now</button>
+  </div>
+
+  <!-- Form for Buy Now -->
+  <div id="form-container" class="form-container">
+    <h3>Enter Your Details</h3>
+    <input type="text" id="address" placeholder="Enter your address" required>
+    <input type="text" id="mobile" placeholder="Enter your mobile number" required>
+    <input type="email" id="email" placeholder="Enter your email" required>
+    <button onclick="submitForm()">Submit</button>
+  </div>
+
+  <!-- Payment Form -->
+  <div id="payment-form-container" class="payment-form">
+    <h3>Enter Payment Details</h3>
+    <select id="payment-method" required>
+      <option value="">Select Payment Method</option>
+      <option value="Credit Card">Credit Card</option>
+      <option value="Debit Card">Debit Card</option>
+      <option value="UPI">UPI</option>
+    </select>
+    <input type="text" id="card-number" placeholder="Card Number (if applicable)" required>
+    <input type="text" id="card-name" placeholder="Cardholder Name (if applicable)" required>
+    <button onclick="submitPayment()">Submit Payment</button>
+  </div>
+
+  <!-- Feedback Form -->
+  <div id="feedback-form-container" class="feedback-form">
+    <h3>Feedback</h3>
+    <div class="stars">
+      <i class="fa fa-star" onclick="rateProduct(1)"></i>
+      <i class="fa fa-star" onclick="rateProduct(2)"></i>
+      <i class="fa fa-star" onclick="rateProduct(3)"></i>
+      <i class="fa fa-star" onclick="rateProduct(4)"></i>
+      <i class="fa fa-star" onclick="rateProduct(5)"></i>
+    </div>
+    <textarea id="feedback" placeholder="Enter your feedback here..." required></textarea>
+    <button onclick="submitFeedback()">Submit Feedback</button>
+  </div>
+
+  <script>
+    let cart = [];
+    let total = 0;
+    let rating = 0;
+
+    // Add product to cart
+    function addToCart(product, price, event) {
+      event.stopPropagation();
+      cart.push({ product, price });
+      total += price;
+      updateCartUI();
+    }
+
+    // Update cart UI
+    function updateCartUI() {
+      const cartItems = document.getElementById("cart-items");
+      cartItems.innerHTML = "";
+      cart.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `${item.product} - ₹${item.price.toFixed(2)} <button onclick="removeFromCart(${index})">Delete</button>`;
+        cartItems.appendChild(li);
+      });
+    }
+
+    // Remove item from cart
+    function removeFromCart(index) {
+      total -= cart[index].price;
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    // Toggle cart sidebar
+    function toggleCart() {
+      const sidebar = document.getElementById("cart-sidebar");
+      sidebar.classList.toggle("open");
+    }
+
+    // Generate Bill
+    function generateBill() {
+      let billHtml = "<ul>";
+      cart.forEach(item => {
+        billHtml += `<li>${item.product} - ₹${item.price.toFixed(2)}</li>`;
+      });
+      billHtml += "</ul>";
+      document.getElementById("bill-items").innerHTML = billHtml;
+      document.getElementById("billModal").style.display = "block";
+    }
+
+    // Close Bill Modal
+    function closeBill() {
+      document.getElementById("billModal").style.display = "none";
+    }
+
+    // Open the form after clicking "Buy Now"
+    function openForm() {
+      document.getElementById("billModal").style.display = "none";
+      document.getElementById("form-container").style.display = "block";
+    }
+
+    // Submit form
+    function submitForm() {
+      const address = document.getElementById("address").value;
+      const mobile = document.getElementById("mobile").value;
+      const email = document.getElementById("email").value;
+
+      if (address && mobile && email) {
+        alert(`Order Submitted!\nAddress: ${address}\nMobile: ${mobile}\nEmail: ${email}`);
+        document.getElementById("form-container").style.display = "none";
+        document.getElementById("payment-form-container").style.display = "block";
+      } else {
+        alert("Please fill in all the details.");
+      }
+    }
+
+    // Submit payment form
+    function submitPayment() {
+      const paymentMethod = document.getElementById("payment-method").value;
+      const cardNumber = document.getElementById("card-number").value;
+      const cardName = document.getElementById("card-name").value;
+
+      if (paymentMethod && (paymentMethod !== "Credit Card" || cardNumber && cardName)) {
+        alert("Payment successful!");
+        document.getElementById("payment-form-container").style.display = "none";
+        document.getElementById("feedback-form-container").style.display = "block";
+      } else {
+        alert("Please fill in all the payment details.");
+      }
+    }
+
+    // Rate the product
+    function rateProduct(stars) {
+      rating = stars;
+      const starElements = document.querySelectorAll(".feedback-form .stars i");
+      starElements.forEach((star, index) => {
+        if (index < stars) {
+          star.classList.add("selected");
+        } else {
+          star.classList.remove("selected");
+        }
+      });
+    }
+
+    // Submit feedback
+    function submitFeedback() {
+      const feedback = document.getElementById("feedback").value;
+      if (feedback) {
+        alert(`Feedback Submitted! Rating: ${rating} stars\nFeedback: ${feedback}`);
+        document.getElementById("feedback-form-container").style.display = "none";
+      } else {
+        alert("Please provide feedback.");
+      }
+    }
+  </script>
+</body>
+</html>

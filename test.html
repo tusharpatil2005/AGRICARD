@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Protection Products</title>
+  <style>
+    /* Basic styles for the page */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7f6;
+    }
+
+    .header {
+      background-color: #28a745;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px;
+    }
+
+    .product-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      width: 200px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: scale(1.05);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .product-card h3 {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .product-card p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .product-card button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .product-card button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Cart Sidebar */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 300px;
+      height: 100%;
+      background: #fff;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: right 0.3s;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-sidebar h3 {
+      margin-top: 0;
+    }
+
+    .cart-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .cart-sidebar ul li {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-sidebar button {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      width: 80px;
+    }
+
+    .cart-sidebar button:hover {
+      background-color: #c82333;
+    }
+
+    /* Cart Toggle Button */
+    .cart-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+
+    .cart-toggle:hover {
+      background: #218838;
+    }
+
+    /* Bill Styles */
+    .bill {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #a7f0f4;
+      padding: 30px;
+      border-radius: 10px;
+      width: 500px;
+      max-width: 90%;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1100;
+      display: none;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .bill h3 {
+      text-align: center;
+      font-size: 28px;
+      color: #28a745;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .bill ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .bill ul li {
+      font-size: 16px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #f1f1f1;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .bill ul li span {
+      font-weight: bold;
+    }
+
+    .bill p {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    .close-bill {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #dc3545;
+    }
+
+    .close-bill:hover {
+      color: #c82333;
+    }
+
+    /* Button Styles */
+    .bill button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+
+    .bill button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Form Styles */
+    .form-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #a7f0f4;
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 90%;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1200;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .form-container h3 {
+      text-align: center;
+      font-size: 24px;
+      color: #28a745;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .form-container button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .form-container button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Payment Form */
+    .payment-form {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #a7f0f4;
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 90%;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1300;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .payment-form h3 {
+      text-align: center;
+      font-size: 24px;
+      color: #28a745;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .payment-form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .payment-form select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .payment-form button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .payment-form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Feedback Form */
+    .feedback-form {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #a7f0f4;
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 90%;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1400;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .feedback-form h3 {
+      text-align: center;
+      font-size: 24px;
+      color: #28a745;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .feedback-form .stars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .feedback-form .stars i {
+      font-size: 30px;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .feedback-form .stars i.selected {
+      color: #f39c12;
+    }
+
+    .feedback-form textarea {
+      width: 100%;
+      padding: 10px;
+      height: 100px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      resize: none;
+    }
+
+    .feedback-form button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .feedback-form button:hover {
+      background-color: #0056b3;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Agriculture Equipment</h1>
+  </div>
+
+  <!-- Product Cards -->
+  <div class="product-grid">
+    <!-- Example Seed Products -->
+    <div class="product-card" onclick="showProductDetails('DR ENTERPRISES FARMER SAFETY SHOES ', 1299, 'Farmers who are working mostly in the soil mud, it is the best option to save their feet’s from snake bite, insects in soil, sores etc.')">
+        <img src="assets/Equipment/1.avif" alt="Tomato Seeds">
+        <h3>DR ENTERPRISES FARMER SAFETY SHOES </h3>
+        <p>Price: ₹1299</p>
+        <button onclick="addToCart('DR ENTERPRISES FARMER SAFETY SHOES', 1299, event)">Add to Cart</button>
+      </div>
+      <div class="product-card" onclick="showProductDetails('BHARAT 2 IN 1 HAND WEEDER ', 501, '2IN 1 Weeder Tool is simple to use and versatile. It is used to remove weeds in and around trees, garden lawn edges, vegetable beds etc. The blade is made of mild steel that is hardened and tempered.')">
+          <img src="assets/Equipment/2.avif" alt="Tomato Seeds">
+          <h3>BHARAT 2 IN 1 HAND WEEDER </h3>
+          <p>Price: ₹501</p>
+          <button onclick="addToCart('BHARAT 2 IN 1 HAND WEEDER', 501, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('NEPTUNE NF 02 KNAPSACK HAND OPERATED GARDEN SPRAYER ', 1600, 'Neptune NF-02 16L Knapsack Hand Operated Sprayer is a premium quality product from Neptune. All Neptune NF-02 16L Knapsack Hand Operated Sprayer are manufactured by using quality assured material and advanced techniques, which make them up to the standard in this highly challenging field. The materials utilized to manufacture Neptune NF-02 16L Knapsack Hand Operated Sprayer, are sourced from the most reliable and official vendors, chosen after performing detailed market surveys. Neptune products are widely acknowledged in the market for their high quality.')">
+          <img src="assets/Equipment/3.avif" alt="Tomato Seeds">
+          <h3>NEPTUNE NF 02 KNAPSACK HAND OPERATED GARDEN SPRAYER</h3>
+          <p>Price: ₹1600</p>
+          <button onclick="addToCart('NEPTUNE NF 02 KNAPSACK HAND OPERATED GARDEN SPRAYER', 1600, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('BHARAT MANUAL WEEDER-10 INCH ', 549, 'It is used to remove weeds in and around trees, garden lawn edges, vegetable beds etc.')">
+          <img src="assets/Equipment/4.avif" alt="Tomato Seeds">
+          <h3>BHARAT MANUAL WEEDER-10 INCH </h3>
+          <p>Price: ₹549</p>
+          <button onclick="addToCart('BHARAT MANUAL WEEDER-10 INCH', 549, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('BHARAT AKADI- SICKLE (WITHOUT HANDLE)', 490, 'It is a single-handed agricultural tool designed with variously curved blades and typically used for harvesting, or reaping, grain crops or cutting succulent forage chiefly for feeding livestock, either freshly cut or dried as hay.')">
+          <img src="assets/Equipment/5.avif" alt="Tomato Seeds">
+          <h3>BHARAT AKADI- SICKLE (WITHOUT HANDLE) </h3>
+          <p>Price: ₹490</p>
+          <button onclick="addToCart('BHARAT AKADI- SICKLE (WITHOUT HANDLE)', 490, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('LIGHTWEIGHT MULTI UTILTY TORCH ', 301, 'BATTERY: 3.7V 2400 mAh LIGHT SOURCE: LED 2 W BACKUP DURATION: Upto 8 hrs')">
+          <img src="assets/Equipment/6.avif" alt="Tomato Seeds">
+          <h3>LIGHTWEIGHT MULTI UTILTY TORCH  </h3>
+          <p>Price: ₹301</p>
+          <button onclick="addToCart('LIGHTWEIGHT MULTI UTILTY TORCH ', 301, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('HECTARE MANGO HARVESTER PICKER ', 255, 'Use and throw blades: We are providing 4 extra blades. These are very sharp paper blades, easily available at any hardware shop.')">
+          <img src="assets/Equipment/7.avif" alt="Tomato Seeds">
+          <h3>HECTARE MANGO HARVESTER PICKER </h3>
+          <p>Price: ₹255</p>
+          <button onclick="addToCart('HECTARE MANGO HARVESTER PICKER ', 255, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('TARPAULIN (WATERPROOF, HEAVY DUTY, COLOURS: YELLOW, BLUE & SILVER)', 700, 'ade up of 100% virgin raw material, UV Stabilized, tear-resistant, 100% water-resistant, durable, flexible, and last long for so many years.')">
+          <img src="assets/Equipment/8.avif" alt="Tomato Seeds">
+          <h3>TARPAULIN (WATERPROOF, HEAVY DUTY, COLOURS: YELLOW, BLUE & SILVER) </h3>
+          <p>Price: ₹700</p>
+          <button onclick="addToCart('TARPAULIN (WATERPROOF, HEAVY DUTY, COLOURS: YELLOW, BLUE & SILVER)', 700, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('HECTARE MANGO HARVESTER PICKER ', 430, 'User instruction: Pour Two liter of fluid and pump in for 30 times and adjust the nozzle for either fine mist or for pressure jet.')">
+          <img src="assets/Equipment/9.avif" alt="Tomato Seeds">
+          <h3>FARMOGUARD MINI SPRAYER FG 1 L</h3>
+          <p>Price: ₹430</p>
+          <button onclick="addToCart('HECTARE MANGO HARVESTER PICKER ', 430, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('VINSPIRE SINGLE CONE VEGETABLE TRANSPLANTING DEVICE (MILD STEEL)', 1320, 'Vinspire Single Cone Vegetable Transplanting Device, VAPL-SS-01 is a premium quality product from Vinspire. All Vinspire VGT01C Single Cone Vegetable Transplanting Device, are manufactured by using quality assured material and advanced techniques, which make them up to the standard in this highly challenging field. The materials utilized to manufacture Vinspire Single Cone Vegetable Transplanting Device, VAPL-SS-01, are sourced from the most reliable and official vendors, chosen after performing detailed market surveys. Vinspire products are widely acknowledged in the market for their high quality.')">
+          <img src="assets/Equipment/10.avif" alt="Tomato Seeds">
+          <h3>VINSPIRE SINGLE CONE VEGETABLE TRANSPLANTING DEVICE (MILD STEEL)</h3>
+          <p>Price: ₹1320</p>
+          <button onclick="addToCart('VINSPIRE SINGLE CONE VEGETABLE TRANSPLANTING DEVICE (MILD STEEL)', 1320, event)">Add to Cart</button>
+        </div>
+      
+        <div class="product-card" onclick="showProductDetails('HEDGE SHEAR GTS007', 555, 'ade up of 100% virgin raw material, UV Stabilized, tear-resistant, 100% water-resistant, durable, flexible, and last long for so many years.')">
+          <img src="assets/Equipment/11.avif" alt="Tomato Seeds">
+          <h3>HEDGE SHEAR GTS007 </h3>
+          <p>Price: ₹555</p>
+          <button onclick="addToCart('HEDGE SHEAR GTS007', 555, event)">Add to Cart</button>
+        </div>
+        <div class="product-card" onclick="showProductDetails('VINSPIRE 3 IN 1 RICE MILL MACHINE -GRINDER ( WITH MOTOR )', 39500, 'Rice mill include vibrator for distoner from rough paddy and dehusking from paddy removing straw and at the end it can separate rice with small and bigger size.')">
+          <img src="assets/Equipment/12.avif" alt="Tomato Seeds">
+          <h3>VINSPIRE 3 IN 1 RICE MILL MACHINE -GRINDER ( WITH MOTOR ) </h3>
+          <p>Price: ₹39500</p>
+          <button onclick="addToCart('VINSPIRE 3 IN 1 RICE MILL MACHINE -GRINDER ( WITH MOTOR )', 39500, event)">Add to Cart</button>
+        </div>
+  </div>
+
+  <!-- Cart Sidebar -->
+  <div id="cart-sidebar" class="cart-sidebar">
+    <h3>Your Cart</h3>
+    <ul id="cart-items"></ul>
+    <button onclick="generateBill()">Generate Bill</button>
+  </div>
+
+  <!-- Cart Toggle Button -->
+  <button class="cart-toggle" onclick="toggleCart()">🛒</button>
+
+  <!-- Bill Modal -->
+  <div id="billModal" class="bill">
+    <span class="close-bill" onclick="closeBill()">×</span>
+    <h3>Agricard</h3>
+    <ul id="bill-items"></ul>
+    <button onclick="openForm()">Buy Now</button>
+  </div>
+
+  <!-- Form for Buy Now -->
+  <div id="form-container" class="form-container">
+    <h3>Enter Your Details</h3>
+    <input type="text" id="address" placeholder="Enter your address" required>
+    <input type="text" id="mobile" placeholder="Enter your mobile number" required>
+    <input type="email" id="email" placeholder="Enter your email" required>
+    <button onclick="submitForm()">Submit</button>
+  </div>
+
+  <!-- Payment Form -->
+  <div id="payment-form-container" class="payment-form">
+    <h3>Enter Payment Details</h3>
+    <select id="payment-method" required>
+      <option value="">Select Payment Method</option>
+      <option value="Credit Card">Credit Card</option>
+      <option value="Debit Card">Debit Card</option>
+      <option value="UPI">UPI</option>
+    </select>
+    <input type="text" id="card-number" placeholder="Card Number (if applicable)" required>
+    <input type="text" id="card-name" placeholder="Cardholder Name (if applicable)" required>
+    <button onclick="submitPayment()">Submit Payment</button>
+  </div>
+
+  <!-- Feedback Form -->
+  <div id="feedback-form-container" class="feedback-form">
+    <h3>Feedback</h3>
+    <div class="stars">
+      <i class="fa fa-star" onclick="rateProduct(1)"></i>
+      <i class="fa fa-star" onclick="rateProduct(2)"></i>
+      <i class="fa fa-star" onclick="rateProduct(3)"></i>
+      <i class="fa fa-star" onclick="rateProduct(4)"></i>
+      <i class="fa fa-star" onclick="rateProduct(5)"></i>
+    </div>
+    <textarea id="feedback" placeholder="Enter your feedback here..." required></textarea>
+    <button onclick="submitFeedback()">Submit Feedback</button>
+  </div>
+
+  <script>
+    let cart = [];
+    let total = 0;
+    let rating = 0;
+
+    // Add product to cart
+    function addToCart(product, price, event) {
+      event.stopPropagation();
+      cart.push({ product, price });
+      total += price;
+      updateCartUI();
+    }
+
+    // Update cart UI
+    function updateCartUI() {
+      const cartItems = document.getElementById("cart-items");
+      cartItems.innerHTML = "";
+      cart.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `${item.product} - ₹${item.price.toFixed(2)} <button onclick="removeFromCart(${index})">Delete</button>`;
+        cartItems.appendChild(li);
+      });
+    }
+
+    // Remove item from cart
+    function removeFromCart(index) {
+      total -= cart[index].price;
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    // Toggle cart sidebar
+    function toggleCart() {
+      const sidebar = document.getElementById("cart-sidebar");
+      sidebar.classList.toggle("open");
+    }
+
+    // Generate Bill
+    function generateBill() {
+      let billHtml = "<ul>";
+      cart.forEach(item => {
+        billHtml += `<li>${item.product} - ₹${item.price.toFixed(2)}</li>`;
+      });
+      billHtml += "</ul>";
+      document.getElementById("bill-items").innerHTML = billHtml;
+      document.getElementById("billModal").style.display = "block";
+    }
+
+    // Close Bill Modal
+    function closeBill() {
+      document.getElementById("billModal").style.display = "none";
+    }
+
+    // Open the form after clicking "Buy Now"
+    function openForm() {
+      document.getElementById("billModal").style.display = "none";
+      document.getElementById("form-container").style.display = "block";
+    }
+
+    // Submit form
+    function submitForm() {
+      const address = document.getElementById("address").value;
+      const mobile = document.getElementById("mobile").value;
+      const email = document.getElementById("email").value;
+
+      if (address && mobile && email) {
+        alert(`Order Submitted!\nAddress: ${address}\nMobile: ${mobile}\nEmail: ${email}`);
+        document.getElementById("form-container").style.display = "none";
+        document.getElementById("payment-form-container").style.display = "block";
+      } else {
+        alert("Please fill in all the details.");
+      }
+    }
+
+    // Submit payment form
+    function submitPayment() {
+      const paymentMethod = document.getElementById("payment-method").value;
+      const cardNumber = document.getElementById("card-number").value;
+      const cardName = document.getElementById("card-name").value;
+
+      if (paymentMethod && (paymentMethod !== "Credit Card" || cardNumber && cardName)) {
+        alert("Payment successful!");
+        document.getElementById("payment-form-container").style.display = "none";
+        document.getElementById("feedback-form-container").style.display = "block";
+      } else {
+        alert("Please fill in all the payment details.");
+      }
+    }
+
+    // Rate the product
+    function rateProduct(stars) {
+      rating = stars;
+      const starElements = document.querySelectorAll(".feedback-form .stars i");
+      starElements.forEach((star, index) => {
+        if (index < stars) {
+          star.classList.add("selected");
+        } else {
+          star.classList.remove("selected");
+        }
+      });
+    }
+
+    // Submit feedback
+    function submitFeedback() {
+      const feedback = document.getElementById("feedback").value;
+      if (feedback) {
+        alert(`Feedback Submitted! Rating: ${rating} stars\nFeedback: ${feedback}`);
+        document.getElementById("feedback-form-container").style.display = "none";
+      } else {
+        alert("Please provide feedback.");
+      }
+    }
+  </script>
+</body>
+</html>

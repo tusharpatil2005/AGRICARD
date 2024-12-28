@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Feedback with Rating</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f3fdf3; /* Soft green background */
+            color: #2d2d2d;
+        }
+        /* Navbar Styles */
+        nav {
+    background: linear-gradient(to right, #388E3C, #388E3C); /* Green gradient for agriculture */
+    padding: 10px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+}
+
+nav ul li {
+    margin: 0 20px;
+    position: relative;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+nav ul li a:hover {
+    background-color: #2C6B2F; /* Darker green on hover */
+    transform: scale(1.05);
+}
+
+/* Dropdown Styles */
+nav ul li .dropdown {
+    display: none;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    background-color: #388E3C;
+    padding: 10px;
+    width: 200px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+nav ul li .dropdown a {
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+nav ul li .dropdown a:hover {
+    background-color: #2C6B2F;
+}
+
+/* Hamburger Icon for Mobile */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+.hamburger div {
+    width: 30px;
+    height: 4px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #388E3C;
+    color: white;
+    padding-top: 60px;
+    transition: left 0.3s ease;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 15px;
+    border-bottom: 1px solid #fff;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #4CAF50;
+}
+
+.sidebar .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    nav ul {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+}
+
+
+        /* Main Content Styles */
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+        }
+        h2 {
+            text-align: center;
+            color: #2e7d32; /* Deep green for headings */
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        .feedback-form {
+            margin-bottom: 20px;
+        }
+        .feedback-form input, .feedback-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .feedback-form input:focus, .feedback-form textarea:focus {
+            outline: none;
+            border-color: #4caf50; /* Green focus */
+            transform: scale(1.02);
+        }
+        .rating-container {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .rating-container span {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.3s ease;
+        }
+        .rating-container span:hover,
+        .rating-container span.active {
+            color: #ffc107; /* Gold color for stars */
+        }
+        .feedback-form button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background-color: #4caf50; /* Vibrant green */
+            color: white;
+            font-size: 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .feedback-form button:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+        }
+        .feedback-list {
+            margin-top: 20px;
+            display: block;
+        }
+        .feedback-item {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: #f1f8e9; /* Light greenish background */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease;
+        }
+        .feedback-item p {
+            margin: 5px 0;
+            color: #4e4e4e;
+        }
+        .feedback-item .stars {
+            color: #ffc107; /* Gold for displayed stars */
+        }
+        .clear-feedback-btn {
+            margin-top: 20px;
+            padding: 12px;
+            border: none;
+            background-color: #e57373; /* Red background for clear button */
+            color: white;
+            font-size: 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            width: 100%;
+            display: none; /* Hidden by default */
+        }
+        .clear-feedback-btn:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+        .toggle-clear-btn {
+            margin-top: 20px;
+            padding: 12px;
+            border: none;
+            background-color: #43a047; /* Green for toggle button */
+            color: white;
+            font-size: 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            width: 100%;
+        }
+        .toggle-clear-btn:hover {
+            background-color: #2e7d32;
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #388e3c;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Home Button Styles */
+        .home-btn {
+            background-color: #4caf50;
+            color: white;
+            padding: 12px;
+            border: none;
+            font-size: 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: background-color 0.3s ease;
+        }
+        .home-btn:hover {
+            background-color: #388e3c;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+
+        <!-- Navbar -->
+            <nav>
+              <div class="logo">
+                  <h1 style="font-size: 25px; color: white;">AGRICARD</h1>
+              </div>
+              <ul>
+                  <li><a href="index.html">Home</a></li>
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="weather.html">Weather</a></li>
+                  <li><a href="mentor.html">Mentor</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                  
+      
+                  <!-- More Button with Dropdown -->
+                  <li>
+                      <a href="javascript:void(0)" onclick="toggleDropdown()">More</a>
+                      <div class="dropdown" id="moreDropdown">
+                          <a href="seed.html">Seed</a>
+                          <a href="crop_protection.html">Crop Protection Products</a>
+                          <a href="equipment.html">Agriculture Equipment</a>
+                          <a href="crop_health.html">Crop Health Analyzer</a>
+                      </div>
+                  </li>
+                  <li><a href="profile.html">Profile</a></li>
+              </ul>
+              <div class="hamburger" onclick="toggleSidebar()">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+              </div>
+            </nav>
+      <!-- Sidebar -->
+      <div id="sidebar" class="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="weather.html">Weather</a></li>
+          <li><a href="mentor.html">Mentor</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+      </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>User Feedback</h2>
+
+        <!-- Home Button -->
+        <button class="home-btn" onclick="window.location.href='index.html'">Home Page</button>
+
+        <div class="feedback-list" id="feedbackList">
+            <!-- Existing feedback will appear here -->
+        </div>
+
+        <h3>Submit Your Feedback</h3>
+        <div class="feedback-form">
+            <input type="text" id="userName" placeholder="Enter your name">
+            <input type="email" id="userEmail" placeholder="Enter your email">
+            <textarea id="feedbackInput" placeholder="Write your feedback here..."></textarea>
+            <div class="rating-container" id="ratingContainer">
+                <span data-value="1">&#9733;</span>
+                <span data-value="2">&#9733;</span>
+                <span data-value="3">&#9733;</span>
+                <span data-value="4">&#9733;</span>
+                <span data-value="5">&#9733;</span>
+            </div>
+            <button onclick="submitFeedback()">Submit Feedback</button>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Agriculture Feedback System. All Rights Reserved.</p>
+    </div>
+
+    <script>
+        const feedbackList = document.getElementById("feedbackList");
+        const stars = document.querySelectorAll(".rating-container span");
+        let currentRating = 0;
+
+        // Star Rating Functionality
+        stars.forEach(star => {
+            star.addEventListener("click", () => {
+                currentRating = star.getAttribute("data-value");
+                stars.forEach(s => s.classList.remove("active"));
+                for (let i = 0; i < currentRating; i++) {
+                    stars[i].classList.add("active");
+                }
+            });
+        });
+
+        // Load feedback from localStorage on page load
+        window.onload = () => {
+            const storedFeedback = JSON.parse(localStorage.getItem("userFeedback")) || [];
+            storedFeedback.forEach(feedback => addFeedbackToList(feedback));
+        };
+
+        // Function to submit feedback
+        function submitFeedback() {
+            const userName = document.getElementById("userName").value.trim();
+            const userEmail = document.getElementById("userEmail").value.trim();
+            const feedbackText = document.getElementById("feedbackInput").value.trim();
+
+            if (userName && userEmail && feedbackText && currentRating > 0) {
+                const feedback = {
+                    name: userName,
+                    email: userEmail,
+                    text: feedbackText,
+                    rating: currentRating
+                };
+
+                // Save to localStorage
+                const feedbackData = JSON.parse(localStorage.getItem("userFeedback")) || [];
+                feedbackData.push(feedback);
+                localStorage.setItem("userFeedback", JSON.stringify(feedbackData));
+
+                // Add feedback to the list
+                addFeedbackToList(feedback);
+
+                // Clear input fields and rating
+                document.getElementById("userName").value = "";
+                document.getElementById("userEmail").value = "";
+                document.getElementById("feedbackInput").value = "";
+                stars.forEach(s => s.classList.remove("active"));
+                currentRating = 0;
+            } else {
+                alert("Please fill out all fields and select a rating.");
+            }
+        }
+
+        // Function to display a feedback item
+        function addFeedbackToList(feedback) {
+            const feedbackItem = document.createElement("div");
+            feedbackItem.className = "feedback-item";
+            feedbackItem.innerHTML = `
+                <p><strong>Name:</strong> ${feedback.name}</p>
+                <p><strong>Email:</strong> ${feedback.email}</p>
+                <p><strong>Feedback:</strong> ${feedback.text}</p>
+                <p class="stars">${"&#9733;".repeat(feedback.rating)}</p>
+            `;
+            feedbackList.appendChild(feedbackItem);
+        }
+    </script>
+</body>
+</html>
