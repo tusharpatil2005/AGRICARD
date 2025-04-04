@@ -305,7 +305,7 @@ nav ul li .dropdown a:hover {
                       <a href="seed.html">Seed</a>
                       <a href="crop_protection.html">Crop Protection Products</a>
                       <a href="equipment.html">Agriculture Equipment</a>
-                      <a href="crop_health.html">Crop Health Analyzer</a>
+                      <a href="crop_prebooking.html">Crop Prebooking</a>
                   </div>
               </li>
               <li><a href="profile.html">Profile</a></li>
@@ -329,6 +329,7 @@ nav ul li .dropdown a:hover {
     </ul>
   </div>
   </header>
+  <div id="google_element"></div>
 
     <div class="container">
         <h1>Agricultural Problem Solutions - Mentor Section</h1>
@@ -476,5 +477,49 @@ nav ul li .dropdown a:hover {
         });
     </script>
 
+
+<script src="https://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
+   <script>
+     function loadGoogleTranslate() {
+         if (!document.getElementById("google_translate_script")) {
+             let script = document.createElement("script");
+             script.id = "google_translate_script";
+             script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateInit";
+             document.body.appendChild(script);
+         }
+     }
+   
+     function googleTranslateInit() {
+         new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_element');
+         restoreLanguage();
+     }
+   
+     function storeLanguage() {
+         let select = document.querySelector(".goog-te-combo");
+         if (select) {
+             select.addEventListener("change", function () {
+                 localStorage.setItem("selectedLanguage", select.value);
+             });
+         }
+     }
+   
+     function restoreLanguage() {
+         let savedLang = localStorage.getItem("selectedLanguage");
+         if (savedLang && savedLang !== "en") {
+             let select = document.querySelector(".goog-te-combo");
+             if (select) {
+                 select.value = savedLang;
+                 select.dispatchEvent(new Event("change"));
+             } else {
+                 setTimeout(restoreLanguage, 500);
+             }
+         }
+     }
+   
+     window.addEventListener("load", function () {
+         loadGoogleTranslate();
+         setTimeout(storeLanguage, 2000);
+     });
+   </script>
 </body>
 </html>

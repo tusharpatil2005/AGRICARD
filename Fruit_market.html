@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agriculture Fruits Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eaf5e3;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2d6a4f;
+            font-size: 28px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .search-box {
+            margin: 20px 0;
+        }
+        input {
+            width: 60%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #40916c;
+            border-radius: 8px;
+            outline: none;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #52b788;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #40916c;
+        }
+        .results {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .result-card {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            width: 250px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .result-card:hover {
+            transform: scale(1.05);
+        }
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        #map {
+            width: 100%;
+            height: 500px;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 2px solid #40916c;
+        }
+        .navigate-button {
+        margin-top: 20px;
+        display: inline-block;
+        padding: 12px 20px;
+        font-size: 16px;
+        background-color: #2d6a4f;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .navigate-button:hover {
+        background-color: #1b4332;
+    }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1> Search for Fruits & Their Locations in India </h1>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Enter city or fruit name...">
+            <button onclick="search()">Search</button>
+        </div>
+        <div class="results" id="results"></div>
+        <div id="map"></div>
+        <a href="crop_prebooking.html" class="navigate-button">Go to Crop Prebooking</a>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([20.5937, 78.9629], 5); 
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const data = [
+        { city: "Nagpur", fruit: "Orange", percentage: 40, lat: 21.1458, lng: 79.0882, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbB_doR9LVg_xVbDXOOZc3TNbgNCEIzLLKw&s" },
+        { city: "Shimla", fruit: "Apple", percentage: 55, lat: 31.1048, lng: 77.1734, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtkzZMTh_n9DE3CznuCnA8wVdQI7IQT9sDng&s" },
+        { city: "Ratnagiri", fruit: "Mango", percentage: 70, lat: 16.9944, lng: 73.3000, image: "https://5.imimg.com/data5/SELLER/Default/2023/9/344928632/OW/RQ/XC/25352890/yellow-mango.jpeg" },
+        { city: "Nashik", fruit: "Grapes", percentage: 60, lat: 19.9975, lng: 73.7898, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoZ_mHmok7Fpn6le_dktQWhqF54C2EOI8BUw&s" },
+        { city: "Lucknow", fruit: "Guava", percentage: 50, lat: 26.8467, lng: 80.9462, image: "https://nativeindianorganics.com/wp-content/uploads/2022/11/guava-seeds.jpg" },
+        { city: "Kolkata", fruit: "Banana", percentage: 80, lat: 22.5726, lng: 88.3639, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAiE9BZy3SyV4Xb83a3V-e8Ywq6z1bVZlGsA&shttps://source.unsplash.com/100x100/?" },
+        { city: "Jalgaon", fruit: "Banana", percentage: 85, lat: 21.0077, lng: 75.5626, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAiE9BZy3SyV4Xb83a3V-e8Ywq6z1bVZlGsA&s" }, 
+        { city: "Bangalore", fruit: "Papaya", percentage: 65, lat: 12.9716, lng: 77.5946, image: "https://5.imimg.com/data5/SELLER/Default/2023/2/JB/UV/OC/183254488/fresh-organic-papaya.jpg" },
+        { city: "Hyderabad", fruit: "Pomegranate", percentage: 45, lat: 17.3850, lng: 78.4867, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT96Qbt2cEk0C3pvieUBQGmsWmBrmGsWyJ4XA&s" },
+        { city: "Punjab", fruit: "Litchi", percentage: 50, lat: 31.1471, lng: 75.3412, image: "https://indiangloriousnursery.com/wp-content/uploads/2023/04/51cndbhtzL._SX425_.jpg" },
+        { city: "Chennai", fruit: "Coconut", percentage: 90, lat: 13.0827, lng: 80.2707, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfR2QBHyBgHuasxzRMoLuJP3vja5WcPl0SsQ&s" },
+        { city: "Delhi", fruit: "Melon", percentage: 55, lat: 28.6139, lng: 77.2090, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI4i4w1oCJQC4bbSIw5VcQ0UvXMKkt-Cx6VQ&s" },
+        { city: "Jaipur", fruit: "Ber", percentage: 40, lat: 26.9124, lng: 75.7873, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThuv3i9WPUSClLAqi7rpDuYebjbFSOLvaUcw&s" }
+    ];
+
+        let markersLayer = new L.LayerGroup().addTo(map);
+
+        function displayAllFruits() {
+            let bounds = [];
+
+            data.forEach(item => {
+                const marker = L.marker([item.lat, item.lng]).addTo(markersLayer);
+                marker.bindPopup(`
+                    <h3>${item.fruit} - ${item.city}</h3>
+                    <img src="${item.image}" alt="${item.fruit}">
+                    <p>Production: ${item.percentage}%</p>
+                `);
+                bounds.push([item.lat, item.lng]);
+            });
+
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+
+        function search() {
+            const input = document.getElementById("searchInput").value.toLowerCase();
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
+
+            markersLayer.clearLayers();
+
+            const filteredData = data.filter(item => 
+                item.city.toLowerCase().includes(input) || 
+                item.fruit.toLowerCase().includes(input)
+            );
+
+            if (filteredData.length === 0) {
+                resultsDiv.innerHTML = "<p>No results found.</p>";
+                displayAllFruits();
+                return;
+            }
+
+            let bounds = [];
+
+            filteredData.forEach(item => {
+                const marker = L.marker([item.lat, item.lng]).addTo(markersLayer);
+                marker.bindPopup(`<h3>${item.fruit}</h3><img src="${item.image}" alt="${item.fruit}"><p>${item.city} - ${item.percentage}% production</p>`);
+                bounds.push([item.lat, item.lng]);
+            });
+
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+
+        displayAllFruits();
+    </script>
+
+</body>
+</html>

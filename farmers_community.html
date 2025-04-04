@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmers' Community & Knowledge Sharing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        header {
+            background: #28a745;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .forum {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .post-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .post-btn:hover {
+            background: #218838;
+        }
+        .post-img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>Farmers' Community & Knowledge Sharing</header>
+    <div id="google_element"></div>
+    <div class="container">
+        <div class="forum">
+            <h2>Create a Post</h2>
+            <div class="form-group">
+                <input type="text" id="author" placeholder="Your Name">
+            </div>
+            <div class="form-group">
+                <textarea id="message" rows="4" placeholder="Share your knowledge or ask a question..."></textarea>
+            </div>
+            <button class="post-btn" onclick="addPost()">Post</button>
+        </div>
+        <div id="posts" class="forum">
+            <h2>Community Posts</h2>
+        </div>
+    </div>
+    <script>
+        function addPost() {
+            const author = document.getElementById("author").value.trim();
+            const message = document.getElementById("message").value.trim();
+            
+            if (author === "" || message === "") {
+                alert("Please fill in all fields");
+                return;
+            }
+            
+            let posts = JSON.parse(localStorage.getItem("posts")) || [];
+            posts.unshift({ author, message });
+            localStorage.setItem("posts", JSON.stringify(posts));
+            displayPosts();
+            
+            document.getElementById("author").value = "";
+            document.getElementById("message").value = "";
+        }
+
+        function displayPosts() {
+            const postsContainer = document.getElementById("posts");
+            postsContainer.innerHTML = "<h2>Community Posts</h2>";
+            let posts = JSON.parse(localStorage.getItem("posts")) || [];
+            
+            posts.forEach(post => {
+                let postElement = document.createElement("div");
+                postElement.classList.add("forum");
+                postElement.innerHTML = `<p><strong>${post.author}</strong></p><p>${post.message}</p>`;
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", displayPosts);
+    </script>
+   <script src="https://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
+   <script>
+     function loadGoogleTranslate() {
+         if (!document.getElementById("google_translate_script")) {
+             let script = document.createElement("script");
+             script.id = "google_translate_script";
+             script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateInit";
+             document.body.appendChild(script);
+         }
+     }
+   
+     function googleTranslateInit() {
+         new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_element');
+         restoreLanguage();
+     }
+   
+     function storeLanguage() {
+         let select = document.querySelector(".goog-te-combo");
+         if (select) {
+             select.addEventListener("change", function () {
+                 localStorage.setItem("selectedLanguage", select.value);
+             });
+         }
+     }
+   
+     function restoreLanguage() {
+         let savedLang = localStorage.getItem("selectedLanguage");
+         if (savedLang && savedLang !== "en") {
+             let select = document.querySelector(".goog-te-combo");
+             if (select) {
+                 select.value = savedLang;
+                 select.dispatchEvent(new Event("change"));
+             } else {
+                 setTimeout(restoreLanguage, 500);
+             }
+         }
+     }
+   
+     window.addEventListener("load", function () {
+         loadGoogleTranslate();
+         setTimeout(storeLanguage, 2000);
+     });
+   </script>
+</body>
+</html>

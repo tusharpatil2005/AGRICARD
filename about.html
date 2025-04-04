@@ -25,20 +25,31 @@
                 <li><a href="index01.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="weather.html">Weather</a></li>
-                <li><a href="mentor.html">Mentor</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 
     
                 <!-- More Button with Dropdown -->
                 <li>
-                    <a href="javascript:void(0)" onclick="toggleDropdown()">More</a>
+                    <a href="javascript:void(0)" onclick="toggleDropdown()">Products</a>
                     <div class="dropdown" id="moreDropdown">
                         <a href="seed.html">Seed</a>
                         <a href="crop_protection.html">Crop Protection Products</a>
                         <a href="equipment.html">Agriculture Equipment</a>
-                        <a href="crop_health.html">Crop Health Analyzer</a>
+                        <a href="crop_prebooking.html">Crop Prebooking</a>
                     </div>
                 </li>
+                <!-- More Button with Dropdown -->
+            <li>
+              <a href="javascript:void(0)" onclick="toggleDropdown01()">Features</a>
+              <div class="dropdown" id="moreDropdown01">
+                  <a href="weather.html">Weather</a>
+                  <a href="crop_prebooking.html">Crop Prebooking</a>
+                  <a href="govt.scheams.html">Govt Schemes</a>
+                  <a href="mentor.html">Mentor</a>
+                  <a href="Fruit_market.html">Agriculture Fruit Map</a>
+                  <a href="farmers_community.html">Farmers Community</a>
+              </div>
+          </li>
                 <li><a href="profile.html">Profile</a></li>
             </ul>
             <div class="hamburger" onclick="toggleSidebar()">
@@ -47,6 +58,8 @@
                 <div></div>
             </div>
           </nav>
+
+          <div id="google_element" ></div>
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
       <span class="close-btn" onclick="toggleSidebar()">&times;</span>
@@ -60,6 +73,8 @@
       </ul>
     </div>
     </header>
+
+    <div id="google_element"></div>
 
     <!-- About Section -->
     <section class="about-section">
@@ -213,6 +228,10 @@
         const dropdown = document.getElementById("moreDropdown");
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
+    function toggleDropdown01() {
+          const dropdown = document.getElementById("moreDropdown01");
+          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      }
 //----------------------------------------feedback---------------------------------------
 
 const feedbackList = document.getElementById("feedbackList");
@@ -282,5 +301,95 @@ const feedbackList = document.getElementById("feedbackList");
             feedbackList.appendChild(feedbackItem);
         }
     
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
+   <script>
+     function loadGoogleTranslate() {
+         if (!document.getElementById("google_translate_script")) {
+             let script = document.createElement("script");
+             script.id = "google_translate_script";
+             script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateInit";
+             document.body.appendChild(script);
+         }
+     }
+   
+     function googleTranslateInit() {
+         new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_element');
+         restoreLanguage();
+     }
+   
+     function storeLanguage() {
+         let select = document.querySelector(".goog-te-combo");
+         if (select) {
+             select.addEventListener("change", function () {
+                 localStorage.setItem("selectedLanguage", select.value);
+             });
+         }
+     }
+   
+     function restoreLanguage() {
+         let savedLang = localStorage.getItem("selectedLanguage");
+         if (savedLang && savedLang !== "en") {
+             let select = document.querySelector(".goog-te-combo");
+             if (select) {
+                 select.value = savedLang;
+                 select.dispatchEvent(new Event("change"));
+             } else {
+                 setTimeout(restoreLanguage, 500);
+             }
+         }
+     }
+   
+     window.addEventListener("load", function () {
+         loadGoogleTranslate();
+         setTimeout(storeLanguage, 2000);
+     });
+   </script>
+
+
+<script src="https://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
+
+<script>
+  function loadGoogleTranslate() {
+      if (!document.getElementById("google_translate_script")) {
+          let script = document.createElement("script");
+          script.id = "google_translate_script";
+          script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateInit";
+          document.body.appendChild(script);
+      }
+  }
+
+  function googleTranslateInit() {
+      new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_element');
+      restoreLanguage();
+  }
+
+  function storeLanguage() {
+      let select = document.querySelector(".goog-te-combo");
+      if (select) {
+          select.addEventListener("change", function () {
+              localStorage.setItem("selectedLanguage", select.value);
+          });
+      }
+  }
+
+  function restoreLanguage() {
+      let savedLang = localStorage.getItem("selectedLanguage");
+      if (savedLang && savedLang !== "en") {
+          let select = document.querySelector(".goog-te-combo");
+          if (select) {
+              select.value = savedLang;
+              select.dispatchEvent(new Event("change"));
+          } else {
+              setTimeout(restoreLanguage, 500);
+          }
+      }
+  }
+
+  window.addEventListener("load", function () {
+      loadGoogleTranslate();
+      setTimeout(storeLanguage, 2000);
+  });
 </script>
 </html>

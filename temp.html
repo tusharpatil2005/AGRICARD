@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGRICARD Navbar</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        nav {
+            background: green;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        /* Hamburger Menu (Only on Mobile) */
+        .hamburger {
+            cursor: pointer;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: white;
+            display: none; /* Hidden on desktop */
+        }
+
+        /* Sidebar (Mobile Only) */
+        .sidebar {
+            width: 250px;
+            background: green;
+            color: white;
+            position: fixed;
+            left: -250px;
+            top: 0;
+            height: 100%;
+            transition: 0.3s;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 12px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar a:hover {
+            background: #2e7d32;
+        }
+
+        /* Close Button */
+        .close-btn {
+            background: red;
+            color: white;
+            padding: 10px;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            display: none;
+            background: #2e7d32;
+            padding-left: 10px;
+        }
+
+        .dropdown a {
+            padding-left: 20px;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .sidebar {
+                display: flex;
+            }
+        }
+
+        @media screen and (min-width: 769px) {
+            .sidebar {
+                display: none; /* Hide sidebar on larger screens */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <div class="logo">
+        <h1>AGRICARD</h1>
+    </div>
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+</nav>
+
+<!-- Sidebar (Mobile Only) -->
+<div class="sidebar" id="sidebar">
+    <button class="close-btn" onclick="toggleSidebar()">✖</button>
+    <a href="index01.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="weather.html">Weather</a>
+    <a href="mentor.html">Mentor</a>
+    <a href="contact.html">Contact</a>
+
+    <!-- Products Dropdown -->
+    <a href="javascript:void(0)" onclick="toggleDropdown('dropdownProducts')">Products ▼</a>
+    <div class="dropdown" id="dropdownProducts">
+        <a href="seed.html">Seed</a>
+        <a href="crop_protection.html">Crop Protection</a>
+        <a href="equipment.html">Agriculture Equipment</a>
+    </div>
+
+    <!-- Features Dropdown -->
+    <a href="javascript:void(0)" onclick="toggleDropdown('dropdownFeatures')">Features ▼</a>
+    <div class="dropdown" id="dropdownFeatures">
+        <a href="weather.html">Weather</a>
+        <a href="crop_prebooking.html">Crop Prebooking</a>
+        <a href="govt.scheams.html">Govt Schemes</a>
+        <a href="mentor.html">Mentor</a>
+        <a href="Fruit_market.html">Agriculture Fruit Map</a>
+        <a href="farmers_community.html">Farmers Community</a>
+    </div>
+
+    <a href="profile.html">Profile</a>
+</div>
+
+<!-- JavaScript -->
+<script>
+    function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+    }
+
+    function toggleDropdown(id) {
+        let dropdown = document.getElementById(id);
+        dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+    }
+</script>
+
+</body>
+</html>
