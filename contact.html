@@ -152,6 +152,35 @@ nav ul li .dropdown a:hover {
     }
 }
 
+.dropdown-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  padding: 10px 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.mobile-dropdown {
+  display: none;
+  padding-left: 15px;
+  background-color: #2C6B2F;
+}
+
+.mobile-dropdown li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 8px 10px;
+}
+
+.mobile-dropdown li a:hover {
+  background-color: #4CAF50;
+}
+
+
 
 
     .contact-container {
@@ -325,59 +354,88 @@ nav ul li .dropdown a:hover {
     <header>
 
         <!-- Navbar -->
-            <nav>
-              <div class="logo">
-                  <h1 style="font-size: 25px; color: white;">AGRICARD</h1>
-              </div>
-              <ul>
-                  <li><a href="index01.html">Home</a></li>
-                  <li><a href="about.html">About</a></li>
-                  <li><a href="weather.html">Weather</a></li>
-                  <li><a href="contact.html">Contact</a></li>
-                  
-      
-                  <!-- More Button with Dropdown -->
-                  <li>
-                      <a href="javascript:void(0)" onclick="toggleDropdown()">Products</a>
-                      <div class="dropdown" id="moreDropdown">
-                          <a href="seed.html">Seed</a>
-                          <a href="crop_protection.html">Crop Protection Products</a>
-                          <a href="equipment.html">Agriculture Equipment</a>
-                          <a href="crop_prebooking.html">Crop Prebooking</a>
-                      </div>
-                  </li>
-                  <!-- More Button with Dropdown -->
-            <li>
-              <a href="javascript:void(0)" onclick="toggleDropdown01()">Features</a>
-              <div class="dropdown" id="moreDropdown01">
-                  <a href="weather.html">Weather</a>
-                  <a href="crop_prebooking.html">Crop Prebooking</a>
-                  <a href="govt.scheams.html">Govt Schemes</a>
-                  <a href="mentor.html">Mentor</a>
-                  <a href="Fruit_market.html">Agriculture Fruit Map</a>
-                  <a href="farmers_community.html">Farmers Community</a>
-              </div>
-          </li>
-                  <li><a href="profile.html">Profile</a></li>
-              </ul>
-              <div class="hamburger" onclick="toggleSidebar()">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-              </div>
-            </nav>
-      <!-- Sidebar -->
-      <div id="sidebar" class="sidebar">
-        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
-        <ul>
-          <li><a href="index01.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="weather.html">Weather</a></li>
-          <li><a href="mentor.html">Mentor</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="profile.html">Profile</a></li>
-        </ul>
+<nav>
+  <div class="logo">
+    <h1 style="font-size: 25px; color: white;">AGRICARD</h1>
+  </div>
+  <ul id="main-menu">
+    <li><a href="index01.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="weather.html">Weather</a></li>
+    <li><a href="contact.html">Contact</a></li>
+
+    <!-- Products Dropdown (Desktop) -->
+    <li>
+      <a href="javascript:void(0)" onclick="toggleDropdown()">Products</a>
+      <div class="dropdown" id="moreDropdown">
+        <a href="seed.html">Seed</a>
+        <a href="crop_protection.html">Crop Protection</a>
+        <a href="equipment.html">Equipment</a>
+        <a href="crop_prebooking.html">Crop Prebooking</a>
       </div>
+    </li>
+
+    <!-- Features Dropdown (Desktop) -->
+    <li>
+      <a href="javascript:void(0)" onclick="toggleDropdown01()">Features</a>
+      <div class="dropdown" id="moreDropdown01">
+        <a href="weather.html">Weather</a>
+        <a href="crop_prebooking.html">Crop Prebooking</a>
+        <a href="govt.scheams.html">Govt Schemes</a>
+        <a href="mentor.html">Mentor</a>
+        <a href="Fruit_market.html">Agriculture Fruit Map</a>
+        <a href="farmers_community.html">Farmers Community</a>
+      </div>
+    </li>
+
+    <li><a href="profile.html">Profile</a></li>
+  </ul>
+
+  <!-- Hamburger icon -->
+  <div class="hamburger" onclick="toggleSidebar()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</nav>
+
+<!-- Sidebar (Mobile) -->
+<div id="sidebar" class="sidebar">
+  <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+  <ul>
+    <li><a href="index01.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="weather.html">Weather</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="mentor.html">Mentor</a></li>
+    <li><a href="profile.html">Profile</a></li>
+
+    <!-- Products Mobile Toggle -->
+    <li>
+      <button class="dropdown-toggle" onclick="toggleMobileDropdown('productsDropdown')">Products ▾</button>
+      <ul id="productsDropdown" class="mobile-dropdown">
+        <li><a href="seed.html">Seed</a></li>
+        <li><a href="crop_protection.html">Crop Protection</a></li>
+        <li><a href="equipment.html">Equipment</a></li>
+        <li><a href="crop_prebooking.html">Crop Prebooking</a></li>
+      </ul>
+    </li>
+
+    <!-- Features Mobile Toggle -->
+    <li>
+      <button class="dropdown-toggle" onclick="toggleMobileDropdown('featuresDropdown')">Features ▾</button>
+      <ul id="featuresDropdown" class="mobile-dropdown">
+        <li><a href="weather.html">Weather</a></li>
+        <li><a href="crop_prebooking.html">Crop Prebooking</a></li>
+        <li><a href="govt.scheams.html">Govt Schemes</a></li>
+        <li><a href="mentor.html">Mentor</a></li>
+        <li><a href="Fruit_market.html">Agriculture Fruit Map</a></li>
+        <li><a href="farmers_community.html">Farmers Community</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
       </header>
 
 
@@ -531,4 +589,44 @@ nav ul li .dropdown a:hover {
       setTimeout(storeLanguage, 2000);
   });
 </script>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("open");
+  }
+
+  function toggleDropdown() {
+    const dropdown = document.getElementById("moreDropdown");
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function toggleDropdown01() {
+    const dropdown = document.getElementById("moreDropdown01");
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function toggleMobileDropdown(id) {
+    const dropdown = document.getElementById(id);
+    const isOpen = dropdown.style.display === 'block';
+    document.querySelectorAll('.mobile-dropdown').forEach(el => el.style.display = 'none');
+    dropdown.style.display = isOpen ? 'none' : 'block';
+  }
+
+  window.onclick = function (event) {
+    const sidebar = document.getElementById("sidebar");
+    if (!sidebar.contains(event.target) && !document.querySelector('.hamburger').contains(event.target)) {
+      sidebar.classList.remove("open");
+    }
+
+    const dropdowns = ["moreDropdown", "moreDropdown01"];
+    dropdowns.forEach(id => {
+      const dropdown = document.getElementById(id);
+      if (dropdown && !dropdown.contains(event.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+  };
+</script>
+
 </html>

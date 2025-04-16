@@ -69,6 +69,34 @@ nav ul li .dropdown a:hover {
     background-color: #2C6B2F;
 }
 
+.dropdown-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 10px 0;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .mobile-dropdown {
+    display: none;
+    padding-left: 15px;
+  }
+  
+  .mobile-dropdown li a {
+    display: block;
+    padding: 6px 10px;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .mobile-dropdown li a:hover {
+    background-color: #4CAF50;
+  }
+  
+
 /* Hamburger Icon for Mobile */
 .hamburger {
     display: none;

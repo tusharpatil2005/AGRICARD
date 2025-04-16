@@ -513,34 +513,14 @@
     <button onclick="submitForm()">Submit</button>
   </div>
 
-  <!-- Payment Form -->
-  <div id="payment-form-container" class="payment-form">
-    <h3>Enter Payment Details</h3>
-    <select id="payment-method" required>
-      <option value="">Select Payment Method</option>
-      <option value="Credit Card">Credit Card</option>
-      <option value="Debit Card">Debit Card</option>
-      <option value="UPI">UPI</option>
-    </select>
-    <input type="text" id="card-number" placeholder="Card Number (if applicable)" required>
-    <input type="text" id="card-name" placeholder="Cardholder Name (if applicable)" required>
-    <button onclick="submitPayment()">Submit Payment</button>
-  </div>
-
-  <!-- Feedback Form -->
-  <div id="feedback-form-container" class="feedback-form">
-    <h3>Feedback</h3>
-    <div class="stars">
-      <i class="fa fa-star" onclick="rateProduct(1)"></i>
-      <i class="fa fa-star" onclick="rateProduct(2)"></i>
-      <i class="fa fa-star" onclick="rateProduct(3)"></i>
-      <i class="fa fa-star" onclick="rateProduct(4)"></i>
-      <i class="fa fa-star" onclick="rateProduct(5)"></i>
+    <!-- Payment Form -->
+    <div id="payment-form-container" class="payment-form">
+      <h3>Payment </h3>
+      <div id="qr-container" style="width: 200px; height: 200px; padding: 10px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center;">
+        <img src="images/QR.png" alt="QR Code" style="max-width: 100%; max-height: 100%;" />
+      </div>
+      <button onclick="submitPayment()">Submit Payment</button>
     </div>
-    <textarea id="feedback" placeholder="Enter your feedback here..." required></textarea>
-    <button onclick="submitFeedback()">Submit Feedback</button>
-  </div>
-
   <script>
     let cart = [];
     let total = 0;
@@ -654,5 +634,75 @@
       }
     }
   </script>
+
+  <!-- payment methode -->
+<script>
+  function submitPayment() {
+    // You can add your payment processing logic here if needed
+    alert("Payment Submitted!");
+    window.close(); // Closes the current popup window
+  }
+</script>
+
+<!-- Store the data  -->
+<!-- Store the data  -->
+<script>
+  function submitForm() {
+    const address = document.getElementById('address').value;
+    const mobile = document.getElementById('mobile').value;
+    const email = document.getElementById('email').value;
+
+    if (!address || !mobile || !email) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    const productList = [];
+    const items = document.querySelectorAll("#bill-items li");
+    items.forEach(item => {
+      productList.push(item.innerText);
+    });
+
+    const userData = {
+      address,
+      mobile,
+      email,
+      products: productList
+    };
+
+    let data = JSON.parse(localStorage.getItem('formData')) || [];
+    data.push(userData);
+    localStorage.setItem('formData', JSON.stringify(data));
+
+    // Hide the form
+    document.getElementById("form-container").style.display = "none";
+
+    // ✅ Show the payment form
+    document.getElementById("payment-form-container").style.display = "block";
+
+    // OPTIONAL: Store product list in confirmation for later
+    const productDisplay = document.getElementById("confirmed-products");
+    if (productDisplay) {
+      productDisplay.innerHTML = "";
+      productList.forEach(product => {
+        const li = document.createElement("li");
+        li.textContent = product;
+        productDisplay.appendChild(li);
+      });
+    }
+  }
+</script>
+
+<script>
+  function submitPayment() {
+    alert("Payment successful!");
+
+    // Hide payment form
+    document.getElementById("payment-form-container").style.display = "none";
+
+    // Show confirmation
+    document.getElementById("confirmation").style.display = "block";
+  }
+</script>
 </body>
 </html>

@@ -4,8 +4,7 @@
 #### Title :- Agricard Website
 #### Domain :- Software
 #### Application :- 
-An e-commerce agriculture website should include user & seller management with dashboards for farmers and buyers. It must support product & inventory management, allowing sellers to list and update stock easily. Smart search & filtering should enable buyers to find products by category, location, and price. Order & payment processing with multiple gateways and tracking ensures smooth transactions. AI-driven insights can provide personalized recommendations and crop demand predictions. Additionally, features like community forums, expert consultancy, and weather-based farming suggestions enhance user engagement and decision-making. 
-
+An e-commerce agriculture platform should offer robust user and seller management with dedicated dashboards for both farmers and buyers. It must support easy product and inventory management, enabling sellers to list and update stock efficiently. Smart search and filtering options, including Google Maps integration, allow buyers to find specific produce by category, location, and price. The platform should support seamless order and payment processing with multiple gateways and real-time tracking, along with optional blockchain-based smart contracts for secure transactions. AI-driven insights can provide personalized product recommendations and predict crop demand. To enhance user engagement, the platform should feature community forums, expert consultations, and weather-based farming suggestions using real-time weather APIs. Additionally, a crop pre-booking system can help align production with demand, while a dedicated section for government schemes keeps farmers informed and empowered. Farmer community pages further support visibility and interaction within the ecosystem.
 #### Abstract :-
 
 Agricard is a digital platform designed to simplify and
@@ -93,7 +92,16 @@ Agricard aims to revolutionize the agricultural sector by integrating technology
    •	Multi-payment Options – UPI, Net Banking, Wallets, and Cash on Delivery.
    •	Blockchain-based Smart Contracts – For secure and transparent transactions.
 5.	Additional Features
-   •	Community & Support – Discussion forums, FAQs, and expert advice sections.
+
+   • Community & Support Platforms – Includes discussion forums, comprehensive FAQs, and expert advisory sections to foster knowledge sharing. 
+   
+   • Geo-based Product Search – Integration with Google Maps to enable customers to locate and search for specific fruits or produce from nearby sources.
+   
+   • Farmer Community Pages – Dedicated pages for farmers to showcase products, share updates, and engage with the marketplace community.
+   
+   • Government Schemes Integration – Centralized section providing verified information and updates on relevant government schemes and subsidies for farmers.
+   
+   • Crop Pre-booking System – Allows buyers to pre-book crops directly from farmers, supporting demand forecasting and reducing post-harvest uncertainties.
 
 
 ## E.Project Planning and Design

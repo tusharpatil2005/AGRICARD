@@ -291,5 +291,29 @@
             }
         });
     </script>
+
+<!-- Store the data -->
+<script>
+    document.getElementById("register-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+    
+        const name = document.getElementById("register-name").value;
+        const email = document.getElementById("register-email").value;
+        const password = document.getElementById("register-password").value;
+    
+        // Retrieve current data or set empty array
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+    
+        // Add new user
+        users.push({ name, email, password });
+    
+        // Store updated list
+        localStorage.setItem("users", JSON.stringify(users));
+    
+        alert("Registration successful!");
+        this.reset();
+    });
+    </script>
+    
 </body>
 </html>
