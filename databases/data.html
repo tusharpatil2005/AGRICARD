@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Data Table</title>
+  <style>
+    table {
+      width: 90%;
+      border-collapse: collapse;
+      margin: 20px auto;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #999;
+      text-align: center;
+      vertical-align: top;
+    }
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h2 style="text-align: center;">Stored User Details with Product Info</h2>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Products</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    function loadData() {
+      const data = JSON.parse(localStorage.getItem('formData')) || [];
+      const tbody = document.querySelector("#data-table tbody");
+      tbody.innerHTML = "";
+
+      data.forEach((item, index) => {
+        const productsHtml = item.products.map(product => `<li>${product}</li>`).join("");
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.address}</td>
+          <td>${item.mobile}</td>
+          <td>${item.email}</td>
+          <td><ul>${productsHtml}</ul></td>
+          <td><button onclick="deleteRow(${index})">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function deleteRow(index) {
+      let data = JSON.parse(localStorage.getItem('formData')) || [];
+      data.splice(index, 1);
+      localStorage.setItem('formData', JSON.stringify(data));
+      loadData();
+    }
+
+    window.onload = loadData;
+  </script>
+
+</body>
+</html>

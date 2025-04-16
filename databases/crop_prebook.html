@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company View - Prebooking Orders</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('https://source.unsplash.com/1600x900/?farm,field,green') no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+            color: #4A7023;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            border: 2px solid #8B4513;
+            text-align: center;
+        }
+        h2 {
+            color: #8B4513;
+            font-size: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #8B4513;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #6B8E23;
+            color: white;
+        }
+        button {
+            padding: 10px 15px;
+            background: #4A7023;
+            color: #fff;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #6B8E23;
+        }
+        .remove-btn {
+            background: #B22222;
+        }
+        .remove-btn:hover {
+            background: #8B0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Prebooking Orders</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Mobile No</th>
+                   
+                    <th>Crop Name</th>c:\Users\Tushar\OneDrive\Desktop\My work\temp\market_place.html
+                    <th>Quantity (kg)</th>
+                    <th>Expected Price</th>
+                    <th>Additional Details</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="orderTableBody">
+                <!-- Orders will be populated here -->
+            </tbody>
+        </table>
+        <button onclick="printOrders()">Print Orders</button>
+    </div>
+    
+    <script>
+        function loadOrders() {
+            let storedData = JSON.parse(localStorage.getItem("cropEntries")) || [];
+            let tableBody = document.getElementById("orderTableBody");
+            tableBody.innerHTML = "";
+            
+            storedData.forEach((order, index) => {
+                let row = `<tr>
+                    <td>${order.customerName}</td>
+                    <td>${order.mobileNo}</td>
+                    <td>${order.cropName}</td>
+                    <td>${order.quantity}</td>
+                    <td>${order.price}</td>
+                    <td>${order.details}</td>
+                    <td><button class="remove-btn" onclick="removeOrder(${index})">Remove</button></td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+        
+        function removeOrder(index) {
+            let storedData = JSON.parse(localStorage.getItem("cropEntries")) || [];
+            storedData.splice(index, 1);
+            localStorage.setItem("cropEntries", JSON.stringify(storedData));
+            loadOrders();
+        }
+        
+        function printOrders() {
+            window.print();
+        }
+        
+        document.addEventListener("DOMContentLoaded", loadOrders);
+    </script>
+</body>
+</html>
